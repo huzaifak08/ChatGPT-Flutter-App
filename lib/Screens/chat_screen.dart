@@ -1,7 +1,9 @@
 import 'package:chatgpt_app/Constants/constants.dart';
-import 'package:chatgpt_app/Services/assets_manager.dart';
+import 'package:chatgpt_app/Widgets/chat_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+import '../Services/services.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -36,12 +38,14 @@ class _ChatScreenState extends State<ChatScreen> {
         leading: Padding(
           padding: EdgeInsets.symmetric(
               horizontal: width * 0.01, vertical: height * 0.01),
-          child: Image.asset(AssetsManager.openaiLogo),
+          child: Image.asset('assets/openai_logo.jpg'),
         ),
         title: const Text('ChatGPT'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              await Services.showModelSheet(context: context);
+            },
             icon: const Icon(
               Icons.more_vert_rounded,
               color: Colors.white,
@@ -53,9 +57,13 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           Flexible(
             child: ListView.builder(
-              itemCount: 6,
+              itemCount: chatMessages.length,
               itemBuilder: (context, index) {
-                return Text('Hello');
+                return ChatWidget(
+                  msg: chatMessages[index]["msg"].toString(),
+                  chatIndex:
+                      int.parse(chatMessages[index]["chatIndex"].toString()),
+                );
               },
             ),
           ),
